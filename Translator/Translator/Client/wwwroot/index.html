@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Translator</title>
+    <base href="/" />
+    <link href="css/nes.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">正在初始化页面...</div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>
+        window.OpenDbFilePicker = () => {
+            const pickerOpts = {
+                types: [
+                    {
+                        description: 'SQLite DB File',
+                        accept: {
+                            'dbFile/*': ['.db']
+                        }
+                    },
+                ],
+                excludeAcceptAllOption: true,
+                multiple: false
+            };
+
+            var fileHandle = await window.showOpenFilePicker(pickerOpts);
+            return fileHandle;
+        };
+    </script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+</body>
+
+</html>

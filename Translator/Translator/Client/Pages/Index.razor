@@ -1,0 +1,25 @@
+﻿@page "/"
+@using Translator.Shared
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+
+
+<div id="menu-title">
+    <h1>Translator</h1>
+    <button class="nes-btn" @onclick="openDbFilePicker">选取数据库文件</button>
+</div>
+<div class="menu-area">
+</div>
+
+<dialog class="nes-dialog" id="dialog-default">
+</dialog>
+
+
+@code {
+    private async Task openDbFilePicker()
+    {
+        var dbFile = await JS.InvokeAsync<object>("OpenDbFilePicker");
+    }
+}
