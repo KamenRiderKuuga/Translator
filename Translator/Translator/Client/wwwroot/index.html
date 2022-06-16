@@ -8,13 +8,14 @@
     <base href="/" />
     <link href="css/nes.min.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
+    <link href="Translator.Client.styles.css" rel="stylesheet" />
 </head>
 
 <body>
     <div id="app">正在初始化页面...</div>
     <script src="_framework/blazor.webassembly.js"></script>
     <script>
-        window.OpenDbFilePicker = () => {
+        window.OpenDbFilePicker = async() => {
             const pickerOpts = {
                 types: [
                     {
@@ -32,7 +33,6 @@
             return fileHandle;
         };
     </script>
-    <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>
 
 </html>

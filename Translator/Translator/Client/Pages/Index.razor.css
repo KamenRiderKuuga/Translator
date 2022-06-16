@@ -1,0 +1,7 @@
+﻿.nes-table.is-dark::before {
+    display: none !important;
+}
+
+#menu-title {
+    text-align: center;
+}
