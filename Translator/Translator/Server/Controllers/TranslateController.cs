@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Translator.Server.FileConverters;
 using Translator.Shared;
 
 namespace Translator.Server.Controllers
@@ -23,6 +24,16 @@ namespace Translator.Server.Controllers
             {
                 using Stream fileStream = new FileStream(dbName, FileMode.Create);
                 await file.CopyToAsync(fileStream);
+
+                IFileConverter fileConverter = new SQLiteConverter(dbName);
+                var content = await fileConverter.GetLocalizationRecordsAsync();
+
+                foreach (var item in content)
+                {
+
+                }
+
+
                 return Ok();
             }
             catch (Exception)
