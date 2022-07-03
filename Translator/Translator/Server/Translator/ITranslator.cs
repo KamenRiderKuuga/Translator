@@ -10,8 +10,8 @@
         /// </summary>
         /// <param name="from">源语言</param>
         /// <param name="to">目标语言</param>
-        /// <param name="conent">翻译内容</param>
+        /// <param name="content">翻译内容</param>
         /// <returns></returns>
-        public Task<(bool, string)> TranslateAsync(string from, string to, string conent);
+        public Task<(bool, string)> TranslateAsync(string from, string to, string content);
     }
 }

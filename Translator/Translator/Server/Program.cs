@@ -1,4 +1,5 @@
 using Translator.Server.HttpApi;
+using Translator.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpApi<IBaiduApi>();
+builder.Services.Configure<BaiduTranslatorOptions>(builder.Configuration.GetSection("BaiduTranslator"));
 
 var app = builder.Build();
 

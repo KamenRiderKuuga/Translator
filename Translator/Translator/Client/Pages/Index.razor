@@ -9,6 +9,12 @@
 
 <div id="menu-title">
     <h1>Translator</h1>
+    <div class="nes-select" id="nes-select">
+        <select @onchange="SelectedCarsChanged" id="default-select">
+            <option value="none">选择目标语言</option>
+            <option value="en-US">en-US</option>
+        </select>
+    </div>
     <button class="nes-btn" onclick="document.getElementById('upload').click()">选取多语言库文件</button>
     <InputFile id="upload" OnChange="@OnInputFileChange" style="display:none;" accept=".db" />
 </div>
@@ -16,21 +22,64 @@
 </div>
 
 <dialog class="nes-dialog" id="dialog-default">
+    <div>
+        <p class="title">提示信息</p>
+        <p>@msg</p>
+        <menu class="dialog-menu">
+            <button class="nes-btn" @onclick="hideModal">关闭</button>
+        </menu>
+    </div>
 </dialog>
 
 
 @code {
+    private string selectedLanguage = string.Empty;
+    private string msg = "";
+
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
         if (e?.File == null)
         {
             return;
         }
+
+        if (string.IsNullOrEmpty(selectedLanguage) || selectedLanguage == "none")
+        {
+            await showModal("请选择目标翻译语言！");
+            return;
+        }
+
         using var content = new MultipartFormDataContent();
         long maxFileSize = 1024 * 1024 * 15;
         var fileContent = new StreamContent(e.File.OpenReadStream(maxFileSize));
-        content.Add(content: fileContent, "file", e.File.Name);
+        content.Add(content: fileContent, "File", e.File.Name);
+        content.Add(content: new StringContent(selectedLanguage), "Language");
 
         var response = await Http.PostAsync("/Translate", content);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            await showModal("翻译完毕！");
+            await JS.InvokeAsync<object>("blazorDownloadFileFast", e.File.Name, "application/octet-stream", await response.Content.ReadAsByteArrayAsync());
+        }
+    }
+
+    void SelectedCarsChanged(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            selectedLanguage = (string)e.Value;
+        }
+    }
+
+    private async Task hideModal()
+    {
+        await JS.InvokeAsync<object>("hideModal");
+    }
+
+    private async Task showModal(string content)
+    {
+        msg = content;
+        await JS.InvokeAsync<object>("showModal");
     }
 }
